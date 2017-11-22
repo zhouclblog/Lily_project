@@ -40,40 +40,40 @@ def register_handle(request):
 
 def login(request):
     # 显示登陆页面
-    # 判断是否有键名为eamil的cookie
-    if 'email' in request.COOKIES:
-        email = request.COOKIES['email']
+    # 判断是否有键名为username的cookie
+    if 'username' in request.COOKIES:
+        username = request.COOKIES['username']
         checked = 'checked'
     else:
-        email = ""
+        username = ""
         checked = ""
-    return render(request, "lily_user/login.html", {'email':email, 'checked':checked})
+    return render(request, "lily_user/login.html", {'username':username, 'checked':checked})
 
 def login_check(request):
     # 登陆校验
     # 1.接收数据
-    email = request.POST.get('email')
+    username = request.POST.get('username')
     pwd = request.POST.get('pwd')
     remember = request.POST.get('remember')
     # 2.校验数据
-    if not all([email, pwd, remember]):
+    if not all([username, pwd, remember]):
         # 有数据为空
         return JsonResponse({'res':1})
     # 3.进行数据处理，查找对应的数据库信息
-    passport = UserInfo.objects.get_one_passport(email=email, password=pwd)
+    passport = UserInfo.objects.get_one_passport(username=username, password=pwd)
     if passport:
         next_url = request.session.get('url_path', '#')
         jres = JsonResponse({'res':2, 'next_url':next_url})
         # 判断是否记住用户名
         if remember == 'true':
             # 记住用户名
-            jres.set_cookie('email', email, max_age=7*24*3600)
+            jres.set_cookie('username', username, max_age=7*24*3600)
         else:
             # 不记住用户名
-            jres.delete_cookie('email')
+            jres.delete_cookie('username')
         # 用户名密码输入正确,记录登陆状态
         request.session['islogin'] = True
-        request.session['email'] = email
+        request.session['username'] = username
 
         return jres
     else:

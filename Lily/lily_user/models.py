@@ -10,10 +10,10 @@ class UserInfoManager(models.Manager):
         user_info = self.create(username=username, password=sha_pwd(password), email=email)
         return user_info
 
-    def get_one_passport(self, email, password):
+    def get_one_passport(self, username, password):
         '''根据邮箱和密码跟数据库进行比对'''
         try:
-            passport = self.get(email=email, password=sha_pwd(password))
+            passport = self.get(username=username, password=sha_pwd(password))
         except self.model.DoesNotExist:
             # 账户不存在
             passport = None
