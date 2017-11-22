@@ -10,6 +10,17 @@ class UserInfoManager(models.Manager):
         user_info = self.create(username=username, password=sha_pwd(password), email=email)
         return user_info
 
+    def get_one_passport(self, email, password):
+        '''根据邮箱和密码跟数据库进行比对'''
+        try:
+            passport = self.get(email=email, password=sha_pwd(password))
+        except self.model.DoesNotExist:
+            # 账户不存在
+            passport = None
+        return passport
+
+
+
 class UserInfo(BaseModel):
 
     username = models.CharField(max_length=30, verbose_name="用户名")

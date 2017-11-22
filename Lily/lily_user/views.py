@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 import re
 from lily_user.models import UserInfo
+from django.http import HttpResponse,JsonResponse
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 # Create your views here.
@@ -36,6 +37,57 @@ def register_handle(request):
     user_info = UserInfo.objects.add_one_message(username, password, email)
 
     return redirect(reverse("lily_user:login"))
+
+def login(request):
+    # 显示登陆页面
+    # 判断是否有键名为eamil的cookie
+    if 'email' in request.COOKIES:
+        email = request.COOKIES['email']
+        checked = 'checked'
+    else:
+        email = ""
+        checked = ""
+    return render(request, "lily_user/login.html", {'email':email, 'checked':checked})
+
+def login_check(request):
+    # 登陆校验
+    # 1.接收数据
+    email = request.POST.get('email')
+    pwd = request.POST.get('pwd')
+    remember = request.POST.get('remember')
+    # 2.校验数据
+    if not all([email, pwd, remember]):
+        # 有数据为空
+        return JsonResponse({'res':1})
+    # 3.进行数据处理，查找对应的数据库信息
+    passport = UserInfo.objects.get_one_passport(email=email, password=pwd)
+    if passport:
+        next_url = request.session.get('url_path', '#')
+        jres = JsonResponse({'res':2, 'next_url':next_url})
+        # 判断是否记住用户名
+        if remember == 'true':
+            # 记住用户名
+            jres.set_cookie('email', email, max_age=7*24*3600)
+        else:
+            # 不记住用户名
+            jres.delete_cookie('email')
+        # 用户名密码输入正确,记录登陆状态
+        request.session['islogin'] = True
+        request.session['email'] = email
+
+        return jres
+    else:
+        # 用户名密码输入错误
+        return JsonResponse({'res':0})
+
+def logout(request):
+    #　用户退出
+    # 清空用户的session信息
+    request.session.flush()
+    # 跳转页面
+    return redirect('#')
+
+
 
 
 
