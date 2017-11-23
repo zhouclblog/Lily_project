@@ -4,6 +4,8 @@ import re
 from lily_user.models import UserInfo
 from django.http import HttpResponse,JsonResponse
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from PIL import Image, ImageDraw, ImageFont
+from django.utils.six import BytesIO
 
 # Create your views here.
 def register(request):
@@ -55,30 +57,39 @@ def login_check(request):
     username = request.POST.get('username')
     pwd = request.POST.get('pwd')
     remember = request.POST.get('remember')
+    yzm = request.POST.get('yzm')
     # 2.校验数据
-    if not all([username, pwd, remember]):
+    if not all([username, pwd, remember, yzm]):
         # 有数据为空
         return JsonResponse({'res':1})
-    # 3.进行数据处理，查找对应的数据库信息
-    passport = UserInfo.objects.get_one_passport(username=username, password=pwd)
-    if passport:
-        next_url = request.session.get('url_path', '#')
-        jres = JsonResponse({'res':2, 'next_url':next_url})
-        # 判断是否记住用户名
-        if remember == 'true':
-            # 记住用户名
-            jres.set_cookie('username', username, max_age=7*24*3600)
-        else:
-            # 不记住用户名
-            jres.delete_cookie('username')
-        # 用户名密码输入正确,记录登陆状态
-        request.session['islogin'] = True
-        request.session['username'] = username
+    # 3.验证验证码
+    yzm_str = request.session.get('verifycode')
+    if yzm == yzm_str:
+        # 验证码输入正确
+        # 4.进行数据处理，查找对应的数据库信息
+        passport = UserInfo.objects.get_one_passport(username=username, password=pwd)
+        if passport:
+            next_url = request.session.get('url_path', '#')
+            jres = JsonResponse({'res':2, 'next_url':next_url})
+            # 判断是否记住用户名
+            if remember == 'true':
+                # 记住用户名
+                jres.set_cookie('username', username, max_age=7*24*3600)
+            else:
+                # 不记住用户名
+                jres.delete_cookie('username')
+            # 用户名密码输入正确,记录登陆状态
+            request.session['islogin'] = True
+            request.session['username'] = username
 
-        return jres
+            return jres
+        else:
+            # 用户名密码输入错误
+            return JsonResponse({'res':0})
+
     else:
-        # 用户名密码输入错误
-        return JsonResponse({'res':0})
+        # 验证码输入错误
+        return JsonResponse({'res':3})
 
 def logout(request):
     #　用户退出
@@ -87,7 +98,48 @@ def logout(request):
     # 跳转页面
     return redirect('#')
 
-
+def verify_code(request):
+    '''生成验证码'''
+    import random
+    #定义变量，用于画面的背景色、宽、高
+    bgcolor = (random.randrange(20, 100), random.randrange(
+        20, 100), 255)
+    width = 100
+    height = 25
+    #创建画面对象
+    im = Image.new('RGB', (width, height), bgcolor)
+    #创建画笔对象
+    draw = ImageDraw.Draw(im)
+    #调用画笔的point()函数绘制噪点
+    for i in range(0, 100):
+        xy = (random.randrange(0, width), random.randrange(0, height))
+        fill = (random.randrange(0, 255), 255, random.randrange(0, 255))
+        draw.point(xy, fill=fill)
+    #定义验证码的备选值
+    str1 = 'ABCD123EFGHIJK456LMNOPQRS789TUVWXYZ0'
+    #随机选取4个值作为验证码
+    rand_str = ''
+    for i in range(0, 4):
+        rand_str += str1[random.randrange(0, len(str1))]
+    #构造字体对象，ubuntu的字体路径为“/usr/share/fonts/truetype/freefont”
+    font = ImageFont.truetype('FreeMono.ttf', 23)
+    #构造字体颜色
+    fontcolor = (255, random.randrange(0, 255), random.randrange(0, 255))
+    #绘制4个字
+    draw.text((5, 2), rand_str[0], font=font, fill=fontcolor)
+    draw.text((25, 2), rand_str[1], font=font, fill=fontcolor)
+    draw.text((50, 2), rand_str[2], font=font, fill=fontcolor)
+    draw.text((75, 2), rand_str[3], font=font, fill=fontcolor)
+    #释放画笔
+    del draw
+    #存入session，用于做进一步验证
+    request.session['verifycode'] = rand_str
+    #内存文件操作
+    buf = BytesIO()
+    #将图片保存在内存中，文件类型为png
+    im.save(buf, 'png')
+    #将内存中的图片数据返回给客户端，MIME类型为图片png
+    return HttpResponse(buf.getvalue(), 'image/png')
 
 
 
