@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html>
+{% load staticfiles %}
 <head>
 <title>Login</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,26 +8,82 @@
 <meta name="keywords" content="Fashionpress Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<link href="{% static 'css/bootstrap.css' %}" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <!-- Custom Theme files -->
-<link href="css/style.css" rel='stylesheet' type='text/css' />
+<link href="{% static 'css/style.css' %}" rel='stylesheet' type='text/css' />
 <!-- Custom Theme files -->
 <!--webfont-->
 <link href='http://fonts.useso.com/css?family=Lato:100,200,300,400,500,600,700,800,900' rel='stylesheet' type='text/css'>
-<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+<script type="text/javascript">
+		$(function(){
+			$("#btn").click(function(){
+					// 获取用户名和密码
+					username = $('#username').val()
+					pwd = $('#pwd').val()
+					remember = $('input[name="remember"]').prop('checked')
+					csrf = $('input[name="csrfmiddlewaretoken"]').val()
+					// 发起ajax请求
+					params = {"username":username, "pwd":pwd, "csrfmiddlewaretoken":csrf, "remember":remember}
+					$.post('/user/login_check/', params, function(data){
+							// 判断data.res, res:0, 代表用户名密码错误
+							if(data.res==0){
+								alert('用户名或密码错误！')
+							}
+							
+							else if (data.res == 2) {
+								location.href = data.next_url
+							}
+
+					})
+
+
+
+
+
+
+			})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		})
+
+
+
+
+
+
+
+
+
+
+</script>
 </head>
 <body>
 <div class="header">
 	<div class="header_top">
 		<div class="container">
 			<div class="logo">
-				<a href="index.html"><img src="images/logo.png" alt=""/></a>
+				<a href="index.html"><img src="{% static 'images/logo.png' %}" alt=""/></a>
 			</div>
 			<ul class="shopping_grid">
-			      <a href="#"><li>Join</li></a>
-			      <a href="login.html"><li>Sign In</li></a>
-			      <a href="#"><li><span class="m_1">Shopping Bag</span>&nbsp;&nbsp;(0) &nbsp;<img src="images/bag.png" alt=""/></li></a>
+			      <a href="#"><li>登　陆</li></a>
+			      <a href="login.html"><li>注　册</li></a>
+			      <a href="#"><li><span class="m_1">购　物　车</span>&nbsp;&nbsp;(0) &nbsp;<img src="{% static 'images/bag.png' %}" alt=""/></li></a>
 			      <div class="clearfix"> </div>
 			</ul>
 		    <div class="clearfix"> </div>
@@ -36,22 +93,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 				<a class="toggleMenu" href="#">Menu</a>
 				<ul class="nav">
-					<li><a href="index.html" data-hover="Home">Home</a></li>
-					<li><a href="about.html" data-hover="About Us">About Us</a></li>
-					<li><a href="careers.html" data-hover="Careers">Careers</a></li>
-					<li><a href="contact.html" data-hover="Contact Us">Contact Us</a></li>
-					<li><a href="404.html" data-hover="Company Profile">Company Profile</a></li>
-					<li><a href="register.html" data-hover="Company Registration">Company Registration</a></li>
-					<li><a href="wishlist.html" data-hover="Wish List">Wish List</a></li>
+					<li><a href="index.html" data-hover="Home">首　页</a></li>
+					<li><a href="about.html" data-hover="About Us">关 于 我 们</a></li>
+					<li><a href="careers.html" data-hover="Careers">加 入 我 们</a></li>
+					<li><a href="contact.html" data-hover="Contact Us">联 系 我 们</a></li>
+					<li><a href="404.html" data-hover="Company Profile">我 的 地 址</a></li>
+					<li><a href="register.html" data-hover="Company Registration">我 的 资 料</a></li>
+					<li><a href="wishlist.html" data-hover="Wish List">我 的 订 单</a></li>
 				 </ul>
-				 <script type="text/javascript" src="js/nav.js"></script>
+				 <script type="text/javascript" src="{% static 'js/nav.js' %}"></script>
 	      </div><!-- end h_menu4 -->
      </div>
 </div>
 <div class="column_center">
   <div class="container">
 	<div class="search">
-	  <div class="stay">Search Product</div>
+	  <div class="stay">商　品　搜　索</div>
 	  <div class="stay_right">
 		  <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}">
 		  <input type="submit" value="">
@@ -67,23 +124,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			   <div class="col-md-6 login-left">
 			  	 <h3>NEW CUSTOMERS</h3>
 				 <p>By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.</p>
-				 <a class="acount-btn" href="register.html">Create an Account</a>
+				 <a class="acount-btn" href="/user/register/">Create an Account</a>
 			   </div>
 			   <div class="col-md-6 login-right">
 			  	<h3>REGISTERED CUSTOMERS</h3>
 				<p>If you have an account with us, please log in.</p>
-				<form>
+				<!-- <form method="post" action="/user/login_check/"> -->
 				  <div>
-					<span>Email Address<label>*</label></span>
-					<input type="text"> 
+				  {% csrf_token %}
+					<span>用户名<label>*</label></span>
+					<input type="text" name="username" id="username" value="{{ username }}"> 
 				  </div>
 				  <div>
-					<span>Password<label>*</label></span>
-					<input type="text"> 
+					<span>密码<label>*</label></span>
+					<input type="password" name="pwd" id="pwd"> 
 				  </div>
-				  <a class="forgot" href="#">Forgot Your Password?</a>
-				  <input type="submit" value="Login">
-			    </form>
+				  <input type="checkbox" name="remember" {{ checked }}>
+							<label>记住用户名</label>
+				  <input type="button" value="登陆" id="btn">
+			    <!-- </form> -->
 			   </div>	
 			   <div class="clearfix"> </div>
 		</div>
@@ -94,12 +153,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <div class="footer">
 	<div class="container">
 		<div class="col-md-3 f_grid1">
-			<h3>About</h3>
-			<a href="#"><img src="images/logo.png" alt=""/></a>
+			<h3>关 于 我 们</h3>
+			<a href="#"><img src="{% static 'images/logo.png' %}" alt=""/></a>
 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
 		</div>
 		<div class="col-md-3 f_grid1 f_grid2">
-			<h3>Follow Us</h3>
+			<h3>联 系 我 们</h3>
 			<ul class="social">
 				<li><a href=""> <i class="fb"> </i><p class="m_3">Facebook</p><div class="clearfix"> </div></a></li>
 			    <li><a href=""><i class="tw"> </i><p class="m_3">Twittter</p><div class="clearfix"> </div></a></li>
@@ -108,7 +167,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</ul>
 		</div>
 		<div class="col-md-6 f_grid3">
-			<h3>Contact Info</h3>
+			<h3>联 系 方 式</h3>
 			<ul class="list">
 				<li><p>Phone : 1.800.254.5487</p></li>
 				<li><p>Fax : 1.800.254.2548</p></li>
