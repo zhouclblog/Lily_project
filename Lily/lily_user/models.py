@@ -10,10 +10,11 @@ class UserInfoManager(models.Manager):
         user_info = self.create(username=username, password=sha_pwd(password), email=email)
         return user_info
 
+
 class UserInfo(BaseModel):
 
     username = models.CharField(max_length=30, verbose_name="用户名")
-    password = models.CharField(max_length=30, verbose_name="密码")
+    password = models.CharField(max_length=200, verbose_name="密码")
     email = models.CharField(max_length=40, verbose_name="邮箱")
 
     is_activate = models.BooleanField(default=False, verbose_name="激活状态")
