@@ -23,12 +23,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="header_top">
 		<div class="container">
 			<div class="logo">
-				<a href="index.html"><img src="{% static 'images/logo.png' %}" alt=""/></a>
+				<a href="{% url 'lily_goods:index'%}"><img src="{% static 'images/logo.png' %}" alt=""/></a>
 			</div>
 			<ul class="shopping_grid">
 			      <a href="{% url 'lily_user:register' %}"><li>注 册</li></a>
-			      <a href="login.html"><li>登 录</li></a>
-			      <a href="#"><li><span class="m_1">购 物 车</span>&nbsp;&nbsp;(0) &nbsp;<img src="images/bag.png" alt=""/></li></a>
+			      <a href="{% url 'lily_user:login' %}"><li>登 录</li></a>
+			      <a href="#"><li><span class="m_1">购 物 车</span>&nbsp;&nbsp;(0) &nbsp;<img src="{% static 'images/bag.png' %}" alt=""/></li></a>
 			      <div class="clearfix"> </div>
 			</ul>
 		    <div class="clearfix"> </div>
@@ -38,7 +38,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 				<a class="toggleMenu" href="#">功 能 列 表</a>
 				<ul class="nav">
-					<li class="active"><a href="index.html" data-hover="Home">首 页</a></li>
+					<li class="active"><a href="{% url 'lily_goods:index'%}" data-hover="Home">首 页</a></li>
 					<li><a href="about.html" data-hover="About Us">关 于 我 们</a></li>
 					<li><a href="careers.html" data-hover="Careers">加 入 我 们</a></li>
 					<li><a href="contact.html" data-hover="Contact Us">联 系 我 们</a></li>

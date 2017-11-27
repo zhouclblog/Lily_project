@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}
+
+{% endblock title %}
+{% block event %}
+{% endblock event %}
+
+{% block content %}
+
+<div>
+	<img src="/static/images/{{goods_info.goodsimages_set.get.image_name}}">
+	<p>{{goods_info.goods_id}}</p>
+	<div>
+		<h3>{{goods_info.goods_name}}</h3>
+		<p>￥{{goods_info.goods_price_now}}<small> 原价： {{goods_info.goods_price}}</small></p>
+		<div>
+				<span>-</span>
+				<input type="text" name="" value="1">
+				<span>+</span>
+		</div>
+		<div class="btn btn-primary btn-normal btn-inline " target="_self" title="Get It">
+		加入购物车</div>
+		<div>商品详情：<p>{{goods_info.goods_ad}}</p></div>
+		<div>商品评论：
+
+			<span>好评{{goods_info.good_comment}}</span>
+			<span>中评{{goods_info.middle_comment}}</span>
+			<span>差评{{goods_info.bad_comment}}</span>
+
+
+
+		</div>
+	</div>
+</div>
+
+
+{% endblock content %}

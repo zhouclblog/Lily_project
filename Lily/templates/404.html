@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}404{% endblock title %}
+{% block content %}
+<div class="column_center">
+  <div class="container">
+	<div class="search">
+	  <div class="stay">商 品 搜 索</div>
+	  <div class="stay_right">
+		  <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}">
+		  <input type="submit" value="">
+	  </div>
+	  <div class="clearfix"> </div>
+	</div>
+    <div class="clearfix"> </div>
+  </div>
+</div>
+<div class="about">
+ <div class="container">
+  	<div class="page-not-found">
+		<h1>404</h1>
+		<a href="#">Back </a>
+	</div>
+ </div>
+</div>
+{% endblock content %}

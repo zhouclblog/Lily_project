@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}Lily-主页{% endblock title %}
+{% block event %}
+<script src="{% static 'js/responsiveslides.min.js' %}"></script>
+<script>
+    $(function () {
+      $("#slider").responsiveSlides({
+      	auto: true,
+      	nav: true,
+      	speed: 500,
+        namespace: "callbacks",
+        pager: true,
+      });
+      $(".goods_name").each(function(){
+      	goods_name = $(this).html()
+      if(goods_name.length >=18){
+      	$(this).html(goods_name.substring(0,18))
+      }
+      })
+      
+    });
+</script>
+<script type="text/javascript" src="{% static 'js/hover_pack.js' %}"></script>
+<style type="text/css">
+	#buffer{
+		margin-bottom: 15px;
+	}
+	.sales{
+		font-size: 7px;
+	}
+	.sales small{
+		font-size: 5px;
+		color: green;
+	}
+	.intro,.goods_name{
+		font-size: 10px;
+	}
+	.price{
+		font-size: 15px;
+		color: red;
+		float: left;
+	}
+	.sales_num{
+		float: right;
+	}
+	.part{
+		margin-bottom: 15px;
+	}
+	#pic{
+		margin-left: 15px;
+	}
+</style>
+{% endblock event %}
+{% block content %}
+<div class="slider">
+	  <div class="callbacks_container">
+	      <ul class="rslides" id="slider">
+	        <li><img src="{% static 'images/banner1.jpg'%}" class="img-responsive" alt=""/>
+	        <div class="banner_desc">
+				<h1>We Provide Worlds top fashion for less fashionpress.</h1>
+				<h2>FashionPress the name of the of hi class fashion Web FreePsd.</h2>
+			</div>
+	        </li>
+	        <li><img src="{% static 'images/banner2.jpg'%}" class="img-responsive" alt=""/>
+	         <div class="banner_desc">
+				<h1>Duis autem vel eum iriure dolor in hendrerit.</h1>
+				<h2>Claritas est etiam processus dynamicus, qui sequitur .</h2>
+			 </div>
+	        </li>
+	        <li><img src="{% static 'images/banner3.jpg'%}" class="img-responsive" alt=""/>
+	          <div class="banner_desc">
+				<h1>Ut wisi enim ad minim veniam, quis nostrud.</h1>
+				<h2>Mirum est notare quam littera gothica, quam nunc putamus.</h2>
+			  </div>
+	        </li>
+	      </ul>
+	  </div>
+</div>
+<div class="column_center">
+  <div class="container">
+	<div class="search">
+	  <div class="stay">商 品 搜 索</div>
+	  <div class="stay_right">
+		  <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}">
+		  <input type="submit" value="">
+	  </div>
+	  <div class="clearfix"> </div>
+	</div>
+    <div class="clearfix"> </div>
+  </div>
+</div>
+<div class="main">
+  <div class="content_top">
+  	<div class="container">
+	   <div class="col-md-3 sidebar_box">
+	   	 <div class="sidebar">
+			<div class="menu_box">
+		    <h3 class="menu_head">精品女装商品分类</h3>
+			  <ul class="menu">
+				<li class="item1"><a href="#"><img class="arrow-img" src="{% static 'images/f_menu.png' %}" alt=""/> 人气商品</a>
+					<ul class="cute">
+					{% for type_hot in goods_type %}
+						<li class="subitem1"><a href="/list/{{type_hot.id}}?sort=">{{ type_hot.type_name}}</a></li>
+						{% endfor %}
+					</ul>
+				</li>
+				{% for type in types %}
+				<li class="item2"><a href="#"><img class="arrow-img" src="{% static 'images/f_menu.png' %}" alt=""/>{{ type.0 }}</a>
+					<ul class="cute">
+						{% for lei in type.1 %}
+						<li class="subitem1"><a href="/list/{{lei.id}}?sort=">{{lei.type_name}}</a></li>
+						{% endfor %}
+					</ul>
+				</li>
+				{% endfor %}
+				
+			</ul>
+		</div>
+				<!--initiate accordion-->
+		<script type="text/javascript">
+			$(function() {
+			    var menu_ul = $('.menu > li > ul'),
+			           menu_a  = $('.menu > li > a');
+			    menu_ul.hide();
+			    menu_a.click(function(e) {
+			        e.preventDefault();
+			        if(!$(this).hasClass('active')) {
+			            menu_a.removeClass('active');
+			            menu_ul.filter(':visible').slideUp('normal');
+			            $(this).addClass('active').next().stop(true,true).slideDown('normal');
+			        } else {
+			            $(this).removeClass('active');
+			            $(this).next().stop(true,true).slideUp('normal');
+			        }
+			    });
+			
+			});
+		</script>
+       </div>
+		    <div class="delivery">
+				<img src="{% static 'images/delivery.jpg' %}" class="img-responsive" alt=""/>
+				<h3>Delivering</h3>
+				<h4>World Wide</h4>
+			</div>
+			<div class="twitter">
+			   <h3>Latest From Twitter</h3>
+			   <ul class="twt1">
+			   	  <i class="twt"> </i>
+			   	  <li class="twt1_desc"><span class="m_1">@Contrary</span> to popular belief, Lorem Ipsum is<span class="m_1"> not simply</span></li>
+			   	  <div class="clearfix"> </div>
+			   </ul>
+			   <ul class="twt1">
+			   	  <i class="twt"> </i>
+			   	  <li class="twt1_desc"><span class="m_1">There are many</span> variations of passages of Lorem Ipsum available, but the majority <span class="m_1">have suffered</span></li>
+			   	  <div class="clearfix"> </div>
+			   </ul>
+			   <ul class="twt1">
+			   	  <i class="twt"> </i>
+			   	  <li class="twt1_desc"><span class="m_1">Lorem Ipsum</span> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has <span class="m_1">been the industry's standard dummy text ever</span></li>
+			   	  <div class="clearfix"> </div>
+			   </ul>
+			</div>
+			<div class="clients">
+				<h3>Our Happy Clients</h3>
+				<h4>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae.</h4>
+			   <ul class="user">
+			   	<i class="user_icon"></i>
+			   	<li class="user_desc"><a href="#"><p>John Doe, Company Info</p></a></li>
+			   	<div class="clearfix"> </div>
+			   </ul>
+			</div>
+	   </div> 
+	   <div class="col-md-9 content_right">
+	   <h4 class="head">商家推荐</h4>
+
+
+
+	   <div class="top_grid1">
+	     <div class="col-md-4 box_2">
+	     	<div class="grid_1"><a href="single.html">
+	     		<div class="b-link-stroke b-animate-go  thickbox">
+		        <img src="{% static 'images/5a0a3abdN16179303.jpg' %}" class="img-responsive" alt=""/></div>
+	     	   <div class="grid_2">
+	     	  	<p>{{goods_shop.0.shop_name}}</p>
+	     	  	<div class="sales">销量<small> : {{goods_shop.0.amount}}+</small></div>
+	     	  	<div class="intro">{{goods_shop.0.shop_name}}最低折扣3.5折</div>
+	     	  	<div class="clearfix"> </div>
+	     	  	</ul>
+	     	   </div>
+	     	</div>
+	     </a></div>
+	     <div class="col-md-8 box_1"><a href="single.html">
+	       <div class="grid_1">
+	     	  <div class="b-link-stroke b-animate-go  thickbox">
+		        <img src="{% static 'images/ias_150790239256475_570x273_90.jpg' %}" class="img-responsive" alt=""/> </div>
+	     	  <div class="grid_2">
+	     	  	<p>{{goods_shop.1.shop_name}}</p>
+	     	  	<div class="sales">销量<small> : {{goods_shop.1.amount}}+</small></div>
+	     	  	<div class="intro">{{goods_shop.1.shop_name}}最低折扣6.5折</div>
+	     	  		<div class="clearfix"> </div>
+	     	  	</ul>
+	     	  </div>
+	     	</div>
+	     </a></div>
+	     <div class="clearfix"> </div>
+	    </div> 
+	    <div class="top_grid2">
+	      <div class="col-md-8 top_grid1-box1"><a href="single.html">
+	     	<div class="grid_1" id="buffer">
+	     	  <div class="b-link-stroke b-animate-go  thickbox">
+		        <img src="{% static 'images/ias_150790239256475_570x273_90.jpg' %}" class="img-responsive" alt=""/> </div>
+	     	  <div class="grid_2">
+	     	  	<p>{{goods_shop.2.shop_name}}</p>
+	     	  	<div class="sales">销量<small> : {{goods_shop.2.amount}}+</small></div>
+	     	  	<div class="intro">{{goods_shop.2.shop_name}}最低折扣3.7折</div>
+	     	  		<div class="clearfix"> </div>
+	     	  	</ul>
+	     	  </div>
+	     	</div>
+	     </a></div>
+	     <div class="col-md-4 top_grid1-box1"><a href="single.html">
+	     	<div class="grid_1" id="buffer">
+	     	  <div class="b-link-stroke b-animate-go  thickbox">
+		        <img src="{% static 'images/5a0a3abdN16179303.jpg' %}" class="img-responsive" alt=""/> </div>
+	     	  <div class="grid_2">
+	     	  	<p>{{goods_shop.3.shop_name}}</p>
+	     	  	<div class="sales">销量<small> : {{goods_shop.3.amount}}+</small></div>
+	     	  	<div class="intro">{{goods_shop.3.shop_name}}最低折扣4.9折</div>
+	     	  		<div class="clearfix"> </div>
+	     	  	</ul>
+	     	  </div>
+	     	</div>
+	     </a></div>
+	     <div class="clearfix"> </div>
+	     <div class="col-md-4 box_2">
+	     	<div class="grid_1"><a href="single.html">
+	     		<div class="b-link-stroke b-animate-go  thickbox">
+		        <img src="{% static 'images/5a0a3abdN16179303.jpg' %}" class="img-responsive" alt=""/></div>
+	     	   <div class="grid_2">
+	     	  	<p>{{goods_shop.4.shop_name}}</p>
+	     	  	<div class="sales">销量<small> : {{goods_shop.4.amount}}+</small></div>
+	     	  	<div class="intro">{{goods_shop.4.shop_name}}最低折扣6.7折</div>
+	     	  		<div class="clearfix"> </div>
+	     	  	</ul>
+	     	   </div>
+	     	</div>
+	     </a></div>
+	     <div class="col-md-8 box_1"><a href="single.html">
+	       <div class="grid_1">
+	     	  <div class="b-link-stroke b-animate-go  thickbox">
+		        <img src="{% static 'images/ias_150790239256475_570x273_90.jpg' %}" class="img-responsive" alt=""/> </div>
+	     	  <div class="grid_2">
+	     	  	<p>{{goods_shop.5.shop_name}}</p>
+	     	  	<div class="sales">销量<small> : {{goods_shop.5.amount}}+</small></div>
+	     	  	<div class="intro">{{goods_shop.5.shop_name}}最低折扣2.7折</div>
+	     	  		<div class="clearfix"> </div>
+	     	  	</ul>
+	     	  </div>
+	     	</div>
+	     </a></div>
+	     <div class="clearfix"> </div>
+	    </div> 
+	    <div class="top_grid2">
+	      <div class="col-md-8 top_grid1-box1"><a href="single.html">
+	     	<div class="grid_1">
+	     	  <div class="b-link-stroke b-animate-go  thickbox">
+		        <img src="{% static 'images/ias_150790239256475_570x273_90.jpg' %}" class="img-responsive" alt=""/> </div>
+	     	  <div class="grid_2">
+	     	  	<p>{{goods_shop.6.shop_name}}</p>
+	     	  	<div class="sales">销量<small> : {{goods_shop.6.amount}}+</small></div>
+	     	  	<div class="intro">{{goods_shop.6.shop_name}}最低折扣5.9折</div>
+	     	  		<div class="clearfix"> </div>
+	     	  	</ul>
+	     	  </div>
+	     	</div>
+	     </a></div>
+	     <div class="col-md-4 top_grid1-box1"><a href="single.html">
+	     	<div class="grid_1">
+	     	  <div class="b-link-stroke b-animate-go  thickbox">
+		        <img src="{% static 'images/5a0a3abdN16179303.jpg' %}" class="img-responsive" alt=""/> </div>
+	     	  <div class="grid_2">
+	     	  	<p>{{goods_shop.7.shop_name}}</p>
+	     	  	<div class="sales">销量<small> : {{goods_shop.7.amount}}+</small></div>
+	     	  	<div class="intro">{{goods_shop.7.shop_name}}最低折扣4.9折</div>
+	     	  		<div class="clearfix"> </div>
+	     	  	</ul>
+	     	  </div>
+	     	</div>
+	     </a></div>
+
+
+	     <div class="clearfix"> </div>
+	    </div> 
+
+
+
+	    <h4 class="head"><span class="m_2">Hot</span> 热销精品</h4>
+	    {% for goods in goods_hot %}
+	    <div class="top_grid2">
+	     <div class="col-md-4 top_grid1-box1 part">
+	     	<div class="grid_1">
+	     	<a href="#">
+	     	  <div class="b-link-stroke b-animate-go  thickbox" id="pic">
+		        <img src="{% static goods.image %}" class="img-responsive" alt=""/> </div>
+		        </a>
+	     	  <div class="grid_2">
+	     	  <a href="#">
+	     	  	<div class="goods_name">{{goods.goods_name}}</div>
+	     	  	</a>
+	     	  	<div class="sales clearfix">
+	     	  	<span class="price">￥{{goods.goods_price_now}}</span>
+	     	  	<span class="sales_num">销量<small> : {{goods.goods_sales}}+</small></span>
+	     	  	
+	     	  	</div>
+	     	  	<div><a class="intro" href="#">{{goods.goods_shop.shop_name}}</a></div>
+	     	  	
+	     	  </div>
+	     	</div>
+	    </div>
+	    {% endfor %}
+	   
+	     <div class="clearfix"> </div>
+	    </div> 
+       </div>
+	  </div>  	    
+	</div>
+</div>
+</div>
+</div>
+</div>
+{% endblock content %}
