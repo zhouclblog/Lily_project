@@ -1,0 +1,96 @@
+{% extends "base.html"%}
+{% load staticfiles %}
+{% block title %}
+Lily_{{goods_type.type_name}}
+{% endblock title %}
+{% block event %}
+<style type="text/css">
+	.content{
+		width: 1140px; 
+		margin: auto;
+	}
+	.goods{
+		width: 250px;
+		text-align: center;
+		background: white;
+		padding-top: 15px;
+		margin-left: 30px;
+		float: left;
+		margin-bottom: 30px;
+	}
+	.list{
+		margin-top: 20px;
+		overflow: hidden;
+	}
+</style>
+<script type="text/javascript" src="{% static 'js/hover_pack.js' %}"></script>
+{% endblock event %}
+
+{% block content%}
+<div class="column_center">
+  <div class="container">
+	<div class="search">
+	  <div class="stay">商　品　搜　索</div>
+	  <div class="stay_right">
+		  <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}">
+		  <input type="submit" value="">
+	  </div>
+	  <div class="clearfix"> </div>
+	</div>
+    <div class="clearfix"> </div>
+  </div>
+</div>
+<div class="main">
+<div class="content clearfix">
+	<p>所有分类>{{goods_type.type_name}}</p>
+	<div>
+		<a href="/list/{{goods_type.id}}?sort=">综合排序</a>
+		<span>|</span>
+		<a href="/list/{{goods_type.id}}?sort=hot">人气</a>
+		<span>|</span>
+		<a href="/list/{{goods_type.id}}?sort=good">好评</a>
+		<span>|</span>
+		<a href="/list/{{goods_type.id}}?sort=price">价格</a>
+		<span>|</span>
+	</div>
+	<div class="list">
+		<ul >
+		{% for goods in goods_li %}
+			<li class="goods">
+			<a href="/detial/{{goods.goods_id}}/">
+				<div class="b-link-stroke b-animate-go  thickbox" id="pic">
+		        <img src="/static/images/{{goods.goodsimages_set.get.image_name}}" class="img-responsive" alt="示例图片"/> </div>
+		        </a>
+		     {% if goods.goods_price_now > 0 %}
+		    <div><span>￥{{goods.goods_price_now}}</span><span>月成交： {{goods.goods_sales}}笔</span></div>
+		    {% else %}
+		    <div>已下架</div>
+		    {% endif %}
+		    <p>
+		    <a href="/detial/{{goods.goods_id}}/">{{goods.goods_name}}</a>
+		    </p>
+		    <p>
+		    <a href="{{goods.goods_shop.id}}">{{goods.goods_shop.shop_name}}</a>
+		    </p>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+<div class="pagenation">
+                {% if goods_li.has_previous %}
+				    <a href="/list/{{ type_id }}/?sort={{ sort }}&page={{ goods_li.previous_page_number }}"><上一页</a>
+                {% endif %}
+                {% for pindex in pages %}
+                    {% if pindex == goods_li.number %}
+                        <a href="/list/{{ type_id }}/?sort={{ sort }}&page={{ pindex }}" class="active">{{ pindex }}</a>
+                    {% else %}
+                        <a href="/list/{{ type_id }}/?sort={{ sort }}&page={{ pindex }}">{{ pindex }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if goods_li.has_next %}
+				    <a href="/list/{{ type_id }}/?sort={{ sort }}&page={{ goods_li.next_page_number }}">下一页></a>
+                {% endif %}
+			</div>
+</div>
+</div>
+{% endblock content %}
