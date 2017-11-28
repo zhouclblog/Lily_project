@@ -1,7 +1,7 @@
 import re
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-from lily_user.models import UserInfo
+from lily_user.models import UserInfo, Address
 from django.http import HttpResponse,JsonResponse
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
@@ -11,13 +11,14 @@ from django.utils.six import BytesIO
 from django.http import JsonResponse, HttpResponse
 from Lily.settings import SECRET_KEY
 from celery_tasks.tasks import send_active_email
+from utils.decorators import login_required, require_GET
+from django_redis import get_redis_connection
 
 
 # Create your views here.
 def register(request):
     # 用来显示注册页面
     return render(request, "lily_user/register.html")
-
 
 def register_handle(request):
     # 用来处理用户注册信息
@@ -147,7 +148,6 @@ def verify_code(request):
     #将内存中的图片数据返回给客户端，MIME类型为图片png
     return HttpResponse(buf.getvalue(), 'image/png')
 
-
 def check_user(request):
     username = request.GET.get("username")
 
@@ -174,7 +174,6 @@ def email_active(request):
     send_active_email(token, email, username)
     return JsonResponse({"res": 0})
 
-
 def active(request):
     token = request.GET.get("token")
     try:
@@ -189,4 +188,79 @@ def active(request):
 
     except:
         return HttpResponse("激活链接已过期")
+
+
+@login_required
+def user_center_info(request):
+    '''用户中心-信息页'''
+    userinfo_id = request.session.get('userinfo_id')
+    # 显示用户的信息
+    username = UserInfo.objects.get_one_passport(userinfo_id=userinfo_id)
+    addr = Address.objects.get_default_address(userinfo_id=userinfo_id)
+    phone = Address.objects.filter(id=userinfo_id).recipient_phone
+    email = UserInfo.objects.filter(id=userinfo_id).email
+    # phone = request.GET.get('recipient_phone')
+    # email = request.GET.get('email')
+
+    # 显示用户中心页面
+    return render(request, 'lily_user/contact.html', {'addr':addr,
+                                                      'username':username,
+                                                      "phone": phone,
+                                                      "email":email,
+                                                      'page':'user_center_info'})
+
+@login_required
+def user_order(request):
+    '''用户中心-订单页'''
+
+    return render(request, 'lily_user/dingdan.html',{'page':'user_order'})
+
+@login_required
+def user_address(request):
+    '''用户中心-地址页'''
+    userinfo_id = request.session.get('userinfo_id')
+
+    if request.method == 'GET':
+        addr = Address.objects.get_default_address(userinfo_id=userinfo_id)
+        return render(request, 'lily_user/address.html', {'addr':addr, 'page':'user_address'})
+
+    else:
+        recipient_name = request.POST.get('username')
+        recipient_addr = request.POST.get('addr')
+        phone = request.POST.get('recipient_phone')
+
+        if not all([recipient_name, recipient_addr, phone]):
+            return render(request, 'lily_user/address.html', {'errmsg': '参数不能为空!'})
+
+        Address.objects.add_one_address(userinfo_id=userinfo_id,
+                                        recipient_name=recipient_name,
+                                        recipient_addr=recipient_addr,
+                                        recipient_phone=phone)
+
+        return redirect(reverse('lily_user:user_address'))
+
+@login_required
+def address_handle(request):
+    '''添加用户的收货地址'''
+
+    recipient_name = request.POST.get('username')
+    recipient_addr = request.POST.get('addr')
+    phone = request.POST.get('phone')
+
+    if not all([recipient_name, recipient_addr, phone]):
+        return render(request, 'lily_user/address.html', {'errmsg': '参数不能为空!'})
+
+    userinfo_id = request.session.get('userinfo_id')
+
+    Address.objects.add_one_address(userinfo_id=userinfo_id,
+                                    recipient_name=recipient_name,
+                                    recipient_addr=recipient_addr,
+                                    recipient_phone=phone)
+
+    return redirect(reverse('lily_user:user_address'))
+
+
+
+
+
 

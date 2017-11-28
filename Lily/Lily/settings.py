@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lily_user',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -49,7 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    # 'utils.middleware.UrlPathRecordMiddleware',
+    'utils.middleware.UrlPathRecordMiddleware',
 )
 
 ROOT_URLCONF = 'Lily.urls'
@@ -113,8 +114,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = 25
 # 发送邮件的邮箱
-EMAIL_HOST_USER = 'zhouchunlinjlu@163.com'
+EMAIL_HOST_USER = 'Fang_13260381173@163.com'
 # 在邮箱中设置的客户端授权密码
-EMAIL_HOST_PASSWORD = 'key123'
+EMAIL_HOST_PASSWORD = 'fy19940916'
 # 收件人看到的发件人
-EMAIL_FROM = 'Lily<zhouchunlinjlu@163.com>'
+EMAIL_FROM = 'Lily<Fang_13260381173@163.com>'

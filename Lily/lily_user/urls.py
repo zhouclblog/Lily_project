@@ -15,6 +15,11 @@ urlpatterns = [
     url(r"^email_active/$", views.email_active, name="email_active"),
     url(r"^active/$", views.active, name="active"),
 
+    url(r'^user_center_info/$', views.user_center_info, name='user_center_info'),
+    url(r'^user_order/$', views.user_order, name='user_order'),
+    url(r'^user_address/$', views.user_address, name='user_address'),
+    url(r'^address_handle/$', views.address_handle, name='address_handle'),
+
    
 
 
