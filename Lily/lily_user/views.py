@@ -75,7 +75,7 @@ def login_check(request):
         # 4.进行数据处理，查找对应的数据库信息
         passport = UserInfo.objects.get_one_passport(username=username, password=pwd)
         if passport:
-            next_url = request.session.get('url_path', '#')
+            next_url = request.session.get('url_path', reverse('lily_goods:index'))
             jres = JsonResponse({'res':2, 'next_url':next_url})
             # 判断是否记住用户名
             if remember == 'true':
@@ -87,6 +87,7 @@ def login_check(request):
             # 用户名密码输入正确,记录登陆状态
             request.session['islogin'] = True
             request.session['username'] = username
+            request.session['passport_id'] = passport.id
 
             return jres
         else:

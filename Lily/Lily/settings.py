@@ -38,6 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lily_user',
+    'lily_goods',
+    'lily_cart',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -49,7 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    # 'utils.middleware.UrlPathRecordMiddleware',
+    'utils.middleware.UrlPathRecordMiddleware',
 )
 
 ROOT_URLCONF = 'Lily.urls'
@@ -118,3 +120,17 @@ EMAIL_HOST_USER = 'zhouchunlinjlu@163.com'
 EMAIL_HOST_PASSWORD = 'key123'
 # 收件人看到的发件人
 EMAIL_FROM = 'Lily<zhouchunlinjlu@163.com>'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1/3",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": ""
+        }
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
