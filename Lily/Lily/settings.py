@@ -38,8 +38,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lily_user',
+
     'lily_goods',
     'lily_cart',
+
+
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -115,10 +119,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = 25
 # 发送邮件的邮箱
-EMAIL_HOST_USER = 'zhouchunlinjlu@163.com'
+EMAIL_HOST_USER = 'Fang_13260381173@163.com'
 # 在邮箱中设置的客户端授权密码
-EMAIL_HOST_PASSWORD = 'key123'
+EMAIL_HOST_PASSWORD = 'fy19940916'
 # 收件人看到的发件人
+
 EMAIL_FROM = 'Lily<zhouchunlinjlu@163.com>'
 
 CACHES = {
@@ -134,3 +139,6 @@ CACHES = {
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+EMAIL_FROM = 'Lily<Fang_13260381173@163.com>'
+
