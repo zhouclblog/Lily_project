@@ -23,6 +23,15 @@ class GoodsInfoManager(models.Manager):
 
         return goods_info
 
+    def get_good_by_id(self, goods_id):
+        # 根据商品id查找商品信息
+        try:
+            goods = self.get(goods_id=goods_id)
+        except self.model.DoesNotExist:
+            # 不存在商品信息
+            goods = None
+        return goods
+
 class GoodsTypeManager(models.Manager):
     pass
 

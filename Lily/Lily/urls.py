@@ -19,4 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^user/', include('lily_user.urls', namespace='lily_user')),
+    url(r'^', include('lily_goods.urls', namespace='lily_goods')),
+    url(r'^cart/', include('lily_cart.urls', namespace='lily_cart')),
+
 ]

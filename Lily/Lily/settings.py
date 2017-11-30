@@ -39,6 +39,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'lily_user',
 
+    'lily_goods',
+    'lily_cart',
+
+
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,4 +123,22 @@ EMAIL_HOST_USER = 'Fang_13260381173@163.com'
 # 在邮箱中设置的客户端授权密码
 EMAIL_HOST_PASSWORD = 'fy19940916'
 # 收件人看到的发件人
+
+EMAIL_FROM = 'Lily<zhouchunlinjlu@163.com>'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1/3",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": ""
+        }
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
 EMAIL_FROM = 'Lily<Fang_13260381173@163.com>'
+

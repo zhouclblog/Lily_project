@@ -10,7 +10,7 @@
 					pwd = $('#pwd').val()
 					remember = $('input[name="remember"]').prop('checked')
 					csrf = $('input[name="csrfmiddlewaretoken"]').val()
-					yzm = $('#yzm').val()
+					yzm = $('#yzmipt').val()
 					// 发起ajax请求
 					params = {"username":username, "pwd":pwd, "csrfmiddlewaretoken":csrf, "remember":remember, "yzm":yzm}
 					$.post('/user/login_check/', params, function(data){

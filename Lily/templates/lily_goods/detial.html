@@ -4,34 +4,132 @@
 
 {% endblock title %}
 {% block event %}
+<script src="{% static 'js/responsiveslides.min.js' %}"></script>
+<script>
+  $(function(){
+    update_total_price()
+    // 计算商品的总价
+    function update_total_price(){
+      //　获取商品的数量和价格
+      goods_price = $('.price_now').children('em').text()
+      // alert(goods_price)
+      goods_count = $('.num_show').val()
+       // 计算商品的总价
+      goods_price = parseFloat(goods_price)
+      goods_count = parseInt(goods_count)
+      total_price = goods_price*goods_count
+      // 设置商品的总价
+      $('.total').children('em').text(total_price.toFixed(2)+'元')
+    }
+
+
+    // 商品增加
+    $('#add').click(function(){
+      // 获取商品数量
+      goods_count = $('.num_show').val()
+      // 对数量进行加１
+      goods_count = parseInt(goods_count)+1
+      // 重新设置商品数量
+      $('.num_show').val(goods_count)
+      // 计算商品的总价
+      update_total_price()
+    })
+
+    // 商品减少
+    $('#minus').click(function(){
+      // 获取商品数量
+      goods_count = $('.num_show').val()
+      // 对数量进行减１
+      goods_count = parseInt(goods_count)-1
+      if(goods_count == 0){
+        goods_count = 1
+      }
+      // 重新设置商品数量
+      $('.num_show').val(goods_count)
+      // 计算商品的总价
+      update_total_price()
+    })
+
+    // 手动输入数量
+    $('.num_show').blur(function(){
+      // 获取商品数量
+      goods_count = $('.num_show').val()
+      // 数据校验
+      if (isNaN(goods_count) || goods_count.trim().length == 0 || parseInt(goods_count) <=0 ){
+          goods_count = 1
+      }
+      // 重新设置商品数量
+      $('.num_show').val(goods_count)
+      // 计算商品的总价
+      update_total_price()
+    })
+
+    // 向购物车中添加数据
+    $('#add_cart').click(function(){
+      // 获取商品的id和数量
+      goods_id = $(this).attr('goods_id')
+      // alert(goods_id)
+      goods_count = $('.num_show').val()
+      csrf = $('input[name="csrfmiddlewaretoken"]').val()
+      // 发送ajax请求，请求的url为/cart/add/，向购物车中添加商品数据
+      params = {'goods_id':goods_id, 'goods_count':goods_count, 'csrfmiddlewaretoken':csrf}
+      $.post('/cart/add/', params, function(data){
+        if(data.res==5){
+          // 购物车数据添加成功
+          count = $('#show_count').html()
+          count = parseInt(count)+parseInt(goods_count)
+          $('#show_count').html(count)
+        }
+        else{
+          // 添加失败
+          alert(data.errmsg)
+        }
+      })
+
+
+
+
+
+
+
+
+
+
+
+
+    })
+  })  
+</script>
 {% endblock event %}
 
 {% block content %}
 
 <div>
-	<img src="/static/images/{{goods_info.goodsimages_set.get.image_name}}">
-	<p>{{goods_info.goods_id}}</p>
-	<div>
-		<h3>{{goods_info.goods_name}}</h3>
-		<p>￥{{goods_info.goods_price_now}}<small> 原价： {{goods_info.goods_price}}</small></p>
-		<div>
-				<span>-</span>
-				<input type="text" name="" value="1">
-				<span>+</span>
-		</div>
-		<div class="btn btn-primary btn-normal btn-inline " target="_self" title="Get It">
-		加入购物车</div>
-		<div>商品详情：<p>{{goods_info.goods_ad}}</p></div>
-		<div>商品评论：
+  <img src="/static/images/{{goods_info.goodsimages_set.get.image_name}}">
+  <p>{{goods_info.goods_id}}</p>
+  <div>
+    <h3>{{goods_info.goods_name}}</h3>
+    <p class="price_now">￥<em>{{goods_info.goods_price_now}}</em><small> 原价： {{goods_info.goods_price}}</small></p>
+    <div>
+        <span id="minus">-</span>
+        <input type="text" class="num_show" name="" value="1">
+        <span id="add">+</span>
+    </div>
+    {% csrf_token %}
+    <div class="total">总价：<em>16.80元</em></div>
+    <a class="btn btn-primary btn-normal btn-inline " target="_self" goods_id="{{ goods_info.goods_id }}" title="Get It" id="add_cart">
+    加入购物车</a>
+    <div>商品详情：<p>{{goods_info.goods_ad}}</p></div>
+    <div>商品评论：
 
-			<span>好评{{goods_info.good_comment}}</span>
-			<span>中评{{goods_info.middle_comment}}</span>
-			<span>差评{{goods_info.bad_comment}}</span>
+      <span>好评{{goods_info.good_comment}}</span>
+      <span>中评{{goods_info.middle_comment}}</span>
+      <span>差评{{goods_info.bad_comment}}</span>
 
 
 
-		</div>
-	</div>
+    </div>
+  </div>
 </div>
 
 

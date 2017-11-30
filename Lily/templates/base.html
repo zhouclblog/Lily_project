@@ -15,7 +15,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- Custom Theme files -->
 <!--webfont-->
 
-<script type="text/javascript" src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-1.11.1.min.js' %}"></script>	
 {% block event %}{% endblock event %}
 </head>
 <body>
@@ -28,7 +28,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<ul class="shopping_grid">
 			      <a href="{% url 'lily_user:register' %}"><li>注 册</li></a>
 			      <a href="{% url 'lily_user:login' %}"><li>登 录</li></a>
-			      <a href="#"><li><span class="m_1">购 物 车</span>&nbsp;&nbsp;(0) &nbsp;<img src="{% static 'images/bag.png' %}" alt=""/></li></a>
+			      <a href="/cart/show/"><li><span class="m_1">购 物 车</span>&nbsp;&nbsp;(<em id="show_count">0</em>) &nbsp;<img src="{% static 'images/bag.png' %}" alt=""/></li></a>
 			      <div class="clearfix"> </div>
 			</ul>
 		    <div class="clearfix"> </div>
@@ -85,4 +85,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   </div>
 </div>
 </body>
-</html>   
+</html>
+{% block cart_count %}
+<script type="text/javascript" src="{% static 'js/jquery-1.11.1.min.js' %}"></script>	
+<script type="text/javascript">
+	$(function(){
+		$.get('/cart/count/', function(data){
+			// alert(data.res)
+			$('#show_count').html(data.res)
+		})
+	})
+</script>
+{% endblock cart_count %}   
